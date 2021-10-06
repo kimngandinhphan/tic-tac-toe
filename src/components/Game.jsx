@@ -205,7 +205,7 @@ function Game() {
                 <ol>{moves}</ol>
             </div>
             <div className="game-input">
-                <form action="#" method="get">
+                <form onSubmit={(e)=>{e.preventDefault();return false;}}>
                     <label htmlFor="rows">Rows:</label>
                     <input type="number" name="" id="rows" min={5} onChange={e => {ROW = +e.target.value}} />
                     <label htmlFor="cols">Columns:</label>
