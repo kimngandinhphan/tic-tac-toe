@@ -2,19 +2,19 @@ import React, { useState } from 'react'
 import Board from './Board';
 
 function Game() {
-    let ROW = 5
-    let COL = 5
-    const [state, setState] = useState({
-        history: [{ squares: Array(ROW)
+  const [rows, setRows] = useState(5)
+  const [cols, setCols] = useState(5)
+  const [state, setState] = useState({
+        history: [{ squares: Array(rows)
             .fill()
-            .map(() => Array(COL).fill(null)), clickIndex: Array(2).fill(null) }],
+            .map(() => Array(cols).fill(null)), clickIndex: Array(2).fill(null) }],
         stepNumber: 0,
         xIsNext: true,
         ascend: false,
     })
     const [winner, setWinner] = useState([])
     const [winnerList, setWinnerList] = useState([])
-    const [size, setSize] = useState({ rows: ROW, cols: COL })
+    const [size, setSize] = useState({ rows, cols })
 
     // -------------------------------------------------------
 
@@ -57,11 +57,11 @@ function Game() {
     }
 
     function onSizeChange() {
-        setSize({ rows: ROW, cols: COL })
+        setSize({ rows: rows, cols: cols })
         setState({
-            history: [{ squares: Array(ROW)
+            history: [{ squares: Array(rows)
                 .fill()
-                .map(() => Array(COL).fill(null)), clickIndex: Array(2).fill(null) }],
+                .map(() => Array(cols).fill(null)), clickIndex: Array(2).fill(null) }],
             stepNumber: 0,
             xIsNext: true,
             ascend: false,
@@ -80,7 +80,7 @@ function Game() {
         let coorY = y;
         winCells.push([x, y]);
     
-        //check on col
+        //check on cols
         let cntInCol = 1;
         coorX = x - 1;
         while (coorX >= 0 && squares[coorX][coorY] === currentVal) {
@@ -90,7 +90,7 @@ function Game() {
         }
     
         coorX = x + 1;
-        while (coorX < ROW && squares[coorX][coorY] === currentVal) {
+        while (coorX < rows && squares[coorX][coorY] === currentVal) {
           winCells.push([coorX, coorY]);
           cntInCol++;
           coorX++;
@@ -99,7 +99,7 @@ function Game() {
           return winCells;
         }
     
-        //check on row
+        //check on rows
         winCells = [];
         winCells.push([x, y]);
         let cntInRow = 1;
@@ -112,7 +112,7 @@ function Game() {
         }
     
         coorY = y + 1;
-        while (coorX < COL && squares[coorX][coorY] === currentVal) {
+        while (coorX < cols && squares[coorX][coorY] === currentVal) {
           winCells.push([coorX, coorY]);
           cntInRow++;
           coorY++;
@@ -136,7 +136,7 @@ function Game() {
     
         coorX = x + 1;
         coorY = y + 1;
-        while (coorX < ROW && coorY < COL && squares[coorX][coorY] === currentVal) {
+        while (coorX < rows && coorY < cols && squares[coorX][coorY] === currentVal) {
           cntMainDiagonal++;
           winCells.push([coorX, coorY]);
           coorX++;
@@ -152,7 +152,7 @@ function Game() {
         let cntSkewDiagonal = 1;
         coorX = x - 1;
         coorY = y + 1;
-        while (coorY < COL && coorX >= 0 && squares[coorX][coorY] === currentVal) {
+        while (coorY < cols && coorX >= 0 && squares[coorX][coorY] === currentVal) {
           cntSkewDiagonal++;
           winCells.push([coorX, coorY]);
           coorY++;
@@ -161,7 +161,7 @@ function Game() {
     
         coorX = x + 1;
         coorY = y - 1;
-        while (coorX < ROW && coorY >= 0 && squares[coorX][coorY] === currentVal) {
+        while (coorX < rows && coorY >= 0 && squares[coorX][coorY] === currentVal) {
           cntSkewDiagonal++;
           winCells.push([coorX, coorY]);
           coorX++;
@@ -191,7 +191,7 @@ function Game() {
     });
     let status = "Next player: " + (state.xIsNext ? "X" : "O")
     if(current.clickIndex[0]) {
-        status = winner.length !== 0 ? "Winner: " + squares[current.clickIndex[0]][current.clickIndex[1]] : (state.stepNumber === ROW*COL) ? "Draw" : "Next player: " + (state.xIsNext ? "X" : "O")
+        status = winner.length !== 0 ? "Winner: " + squares[current.clickIndex[0]][current.clickIndex[1]] : (state.stepNumber === rows*cols) ? "Draw" : "Next player: " + (state.xIsNext ? "X" : "O")
     }
 
     return (
@@ -207,9 +207,9 @@ function Game() {
             <div className="game-input">
                 <form onSubmit={(e)=>{e.preventDefault();return false;}}>
                     <label htmlFor="rows">Rows:</label>
-                    <input type="number" name="" id="rows" min={5} onChange={e => {ROW = +e.target.value}} />
+                    <input type="number" name="" id="rows" min={5} onChange={e => {setRows(+e.target.value)}} />
                     <label htmlFor="cols">Columns:</label>
-                    <input type="number" name="" id="cols" min={5} onChange={e => {COL = +e.target.value}} />
+                    <input type="number" name="" id="cols" min={5} onChange={e => {setCols(+e.target.value)}} />
                     <button type="submit" onClick={onSizeChange} >Submit</button>
                 </form>
             </div>
